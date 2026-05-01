@@ -1,0 +1,8 @@
+{
+  "name": "pi-lens",
+  "type": "extensions",
+  "description": "Real-time code feedback for pi — LSP, linters, formatters, type-checking, structural analysis",
+  "source": "https://github.com/apmantza/pi-lens.git",
+  "upstream": "npm:pi-lens",
+  "enabled": true
+}
