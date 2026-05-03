@@ -1,11 +1,11 @@
 {
   "name": "@gaodes/pi-lens",
-  "version": "3.8.40",
+  "version": "3.8.41",
   "type": "module",
-  "description": "Real-time code feedback for pi \u2014 LSP, linters, formatters, type-checking, structural analysis & booboo",
+  "description": "Real-time code feedback for pi — LSP, linters, formatters, type-checking, structural analysis & booboo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaodes/pi-lens.git"
+    "url": "git+https://github.com/gaodes/pi-lens.git"
   },
   "main": "index.ts",
   "scripts": {
