@@ -316,6 +316,78 @@ export default function (pi: ExtensionAPI) {
 		}
 	}
 
+	// --- Statusbar widget integration ---
+	function emitStatusbarUpdate() {
+		try {
+			const diagStats = getDiagnosticTracker().getStats();
+			const lspCount = getLSPService().getAliveClientCount();
+			const crashes = runtime.getCrashEntries();
+			const totalCrashes = crashes.reduce((sum, [, c]) => sum + c, 0);
+
+			const parts: string[] = [];
+			if (lspCount > 0) parts.push(`LSP:${lspCount}`);
+			if (diagStats.totalShown > 0) {
+				parts.push(`${diagStats.totalUnresolved} issues`);
+			}
+			if (totalCrashes > 0) parts.push(`${totalCrashes} crashes`);
+			if (diagStats.totalAutoFixed > 0)
+				parts.push(`${diagStats.totalAutoFixed} fixed`);
+
+			const text = parts.length > 0 ? parts.join(" · ") : "OK";
+			const color =
+				totalCrashes > 0
+					? "error"
+					: diagStats.totalUnresolved > 0
+						? "warning"
+						: "success";
+
+			pi.events.emit("statusbar:module:update", {
+				id: "pi-lens",
+				text,
+				visible: true,
+				style: { text_font_color: color },
+			});
+		} catch {
+			// Statusbar may not be loaded; skip silently.
+		}
+	}
+
+	function registerStatusbarWidget() {
+		try {
+			pi.events.emit("statusbar:module:register", {
+				id: "pi-lens",
+				text: "starting…",
+				visible: true,
+				placement: { line: 3, side: "left", index: 1 },
+				style: {
+					show_icon: true,
+					icon: "\u{e29c}",
+					icon_color: "accent",
+					text_font_color: "dim",
+					text_font_caps: "small",
+					text_font_style: "regular",
+				},
+			});
+			pi.events.emit("statusbar:widget:contribute", {
+				id: "pi-lens",
+				label: "Pi Lens",
+				description:
+					"Code quality: LSP status, diagnostics, auto-fixes, crashes",
+				default_placement: { line: 3, side: "left", index: 1 },
+			});
+		} catch {
+			// Statusbar may not be loaded; skip silently.
+		}
+	}
+
+	function unregisterStatusbarWidget() {
+		try {
+			pi.events.emit("statusbar:module:unregister", { id: "pi-lens" });
+		} catch {
+			// Statusbar may not be loaded; skip silently.
+		}
+	}
+
 	// --- Flags ---
 
 	pi.registerFlag("no-lens", {
@@ -995,10 +1067,8 @@ export default function (pi: ExtensionAPI) {
 				resetLSPService,
 			});
 			ctx.ui && updateLspStatus(ctx.ui.setStatus, ctx.ui.theme);
-			clearWidgetState();
-			if (lensWidgetVisible) {
-				mountLensWidget(ctx.ui);
-			}
+			registerStatusbarWidget();
+			emitStatusbarUpdate();
 		} catch (sessionErr) {
 			dbg(`session_start crashed: ${sessionErr}`);
 			dbg(`session_start crash stack: ${(sessionErr as Error).stack}`);
@@ -1577,6 +1647,7 @@ export default function (pi: ExtensionAPI) {
 				resetFormatService,
 			});
 			ctx.ui && updateLspStatus(ctx.ui.setStatus, ctx.ui.theme);
+			emitStatusbarUpdate();
 		} catch (turnEndErr) {
 			dbg(`turn_end crashed: ${turnEndErr}`);
 			dbg(`turn_end crash stack: ${(turnEndErr as Error).stack}`);
@@ -1589,6 +1660,7 @@ export default function (pi: ExtensionAPI) {
 	(pi as any).on("session_shutdown", () => {
 		cancelLSPIdleReset();
 		resetLSPService();
+		unregisterStatusbarWidget();
 	});
 
 	// --- Inject turn-end findings into next agent turn ---
