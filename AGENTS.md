@@ -35,9 +35,9 @@ Configured in `prime-settings.json`:
 
 ## Provenance
 
-| What | Where |
-|------|-------|
-| **Upstream** | `npm:pi-lens` · [GitHub](https://github.com/apmantza/pi-lens) by Apostolos Mantziris |
-| **GitHub mirror** | [gaodes/pi-lens](https://github.com/gaodes/pi-lens) |
-| **GitLab source** | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-lens.git` |
-| **npm (fork)** | [`@gaodes/pi-lens`](https://www.npmjs.com/package/@gaodes/pi-lens) |
+| What              | Where                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------ |
+| **Upstream**      | `npm:pi-lens` · [GitHub](https://github.com/apmantza/pi-lens) by Apostolos Mantziris |
+| **GitHub mirror** | [gaodes/pi-lens](https://github.com/gaodes/pi-lens)                                  |
+| **GitLab source** | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-lens.git`      |
+| **npm (fork)**    | [`@gaodes/pi-lens`](https://www.npmjs.com/package/@gaodes/pi-lens)                   |

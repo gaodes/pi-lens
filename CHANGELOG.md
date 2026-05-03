@@ -4,6 +4,18 @@ All notable changes to pi-lens will be documented in this file.
 
 ## [Unreleased]
 
+_No unreleased changes._
+
+## [3.8.41] - 2026-05-03
+
+### Changed
+
+- Point package metadata and npm README links at the public `gaodes/pi-lens` GitHub mirror.
+- Update install instructions to use `npm:@gaodes/pi-lens`.
+- Normalize PrimeCodex provenance metadata and AGENTS.md reference links.
+
+## [3.8.40] - 2026-05-03
+
 ### Added (PrimeCodex fork)
 
 - **Statusbar widget** — pi-lens now emits a `pi-lens` module to pi-statusbar via the `pi.events` plugin API. Shows live code quality summary (LSP count, unresolved issues, crashes, auto-fixes) on statusbar line 3
