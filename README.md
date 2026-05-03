@@ -2,9 +2,16 @@
   <img src="https://raw.githubusercontent.com/apmantza/pi-lens/master/banner.png" alt="pi-lens" width="1100">
 </p>
 
-# pi-lens
+# @gaodes/pi-lens
 
-pi-lens focuses on real-time inline code feedback for AI agents.
+> **Fork of [pi-lens](https://github.com/apmantza/pi-lens)** by [Apostolos Mantzaris](https://github.com/apmantza) — MIT License
+>
+> This fork is maintained by [El Che](https://github.com/gaodes) under the `@gaodes` npm scope.
+> The original project and author retain full credit for their work.
+
+Real-time inline code feedback for AI agents.
+
+[**Source**](https://github.com/gaodes/pi-lens) · [**npm**](https://www.npmjs.com/package/@gaodes/pi-lens) · [**Upstream**](https://github.com/apmantza/pi-lens)
 
 ## What It Does
 
@@ -60,13 +67,7 @@ At `turn_end`, pi-lens:
 ## Install
 
 ```bash
-pi install npm:pi-lens
-```
-
-Or from git:
-
-```bash
-pi install git:github.com/apmantza/pi-lens
+pi install npm:@gaodes/pi-lens
 ```
 
 ## Features
