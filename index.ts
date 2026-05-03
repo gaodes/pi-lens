@@ -338,7 +338,7 @@ export default function (pi: ExtensionAPI) {
 				placement: { line: 3, side: "left", index: 1 },
 				style: {
 					show_icon: true,
-					icon: "\u{e29c}",
+					icon: "f121",
 					icon_color: "accent",
 					text_font_color: "dim",
 					text_font_caps: "small",
