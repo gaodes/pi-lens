@@ -352,21 +352,63 @@ export default function (pi: ExtensionAPI) {
 		}
 	}
 
+	function loadLensSettings(): Record<string, unknown> {
+		try {
+			const agentDir = path.join(os.homedir(), ".pi", "agent");
+			const globalPath = path.join(agentDir, "prime-settings.json");
+			const projectPath = path.join(
+				process.cwd(),
+				".pi",
+				"prime-settings.json",
+			);
+			const settingsPath = nodeFs.existsSync(projectPath)
+				? projectPath
+				: globalPath;
+			if (!nodeFs.existsSync(settingsPath)) return {};
+			const raw = JSON.parse(nodeFs.readFileSync(settingsPath, "utf-8"));
+			return (raw["pi-lens"] as Record<string, unknown>) ?? {};
+		} catch {
+			return {};
+		}
+	}
+
+	function resolveStatusbarConfig() {
+		const settings = loadLensSettings();
+		const cfg = (settings.statusbar ?? {}) as Record<string, unknown>;
+		return {
+			icon: (cfg.icon as string) ?? "f121",
+			icon_color: (cfg.icon_color as string) ?? "accent",
+			text_font_color: (cfg.text_font_color as string) ?? "dim",
+			show_icon: (cfg.show_icon as boolean) ?? true,
+			show_text: (cfg.show_text as boolean) ?? true,
+			min_width: (cfg.min_width as number) ?? 12,
+			placement: {
+				line: ((cfg.placement as Record<string, unknown>)?.line as number) ?? 3,
+				side:
+					((cfg.placement as Record<string, unknown>)?.side as string) ??
+					"left",
+				index:
+					((cfg.placement as Record<string, unknown>)?.index as number) ?? 1,
+			},
+		};
+	}
+
 	function registerStatusbarWidget() {
 		try {
+			const cfg = resolveStatusbarConfig();
 			pi.events.emit("statusbar:module:register", {
 				id: "pi-lens",
 				text: "starting…",
 				visible: true,
-				placement: { line: 3, side: "left", index: 1 },
+				placement: cfg.placement,
 				style: {
-					show_icon: true,
-					icon: "f121",
-					icon_color: "accent",
-					text_font_color: "dim",
+					show_icon: cfg.show_icon,
+					icon: cfg.icon,
+					icon_color: cfg.icon_color,
+					text_font_color: cfg.text_font_color,
 					text_font_caps: "small",
 					text_font_style: "regular",
-					min_width: 12,
+					min_width: cfg.min_width,
 				},
 			});
 			pi.events.emit("statusbar:widget:contribute", {
@@ -374,7 +416,7 @@ export default function (pi: ExtensionAPI) {
 				label: "Pi Lens",
 				description:
 					"Code quality: LSP status, diagnostics, auto-fixes, crashes",
-				default_placement: { line: 3, side: "left", index: 1 },
+				default_placement: cfg.placement,
 			});
 		} catch {
 			// Statusbar may not be loaded; skip silently.
