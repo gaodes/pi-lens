@@ -367,6 +367,14 @@ export default function (pi: ExtensionAPI) {
 				index:
 					((cfg.placement as Record<string, unknown>)?.index as number) ?? 1,
 			},
+			separator_before: (cfg.separator_before as Record<string, unknown>) ?? {
+				icon: "eb8a",
+				icon_color: "dim",
+			},
+			separator_after: (cfg.separator_after as Record<string, unknown>) ?? {
+				icon: "eb8a",
+				icon_color: "dim",
+			},
 		};
 	}
 
@@ -394,6 +402,9 @@ export default function (pi: ExtensionAPI) {
 				description:
 					"Code quality: LSP status, diagnostics, auto-fixes, crashes",
 				default_placement: cfg.placement,
+				separator_before: cfg.separator_before,
+				separator_after: cfg.separator_after,
+				priority: 0,
 			});
 		} catch {
 			// Statusbar may not be loaded; skip silently.
