@@ -49,6 +49,8 @@ migrate-*.js
 # Documentation files - only keep specific docs in public repo
 *.md
 !AGENTS.md
+!CLAUDE.md
+!LICENSE
 !README.md
 !CHANGELOG.md
 !docs/LSP_CONFIG.md
@@ -83,8 +85,6 @@ BUG_*.md
 # Dev log
 clients/dispatch/debug.log
 clients/lsp/.intelephense/
-AGENTS.md
-.npmignore
 .claude/settings.local.json
 autoresearch.jsonl
 coverage/

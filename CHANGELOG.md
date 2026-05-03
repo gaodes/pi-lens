@@ -4,6 +4,14 @@ All notable changes to pi-lens will be documented in this file.
 
 ## [Unreleased]
 
+### Added (PrimeCodex fork)
+
+- **Statusbar widget** — pi-lens now emits a `pi-lens` module to pi-statusbar via the `pi.events` plugin API. Shows live code quality summary (LSP count, unresolved issues, crashes, auto-fixes) on statusbar line 3
+- **Settings integration** — statusbar widget reads config from `prime-settings.json` under the `"pi-lens"` key (icon, colors, placement, separators)
+- **Separator support** — configurable `separator_before` / `separator_after` around the widget, matching the pattern used by pi-1password and pi-theme-sync
+- **Provenance files** — added `AGENTS.md`, `CLAUDE.md`, `LICENSE`
+- **Package** — forked as `@gaodes/pi-lens` on npm with GitLab mirror
+
 ### Added
 
 - **60+ SonarCloud BLOCKER tree-sitter rules** — comprehensive BLOCKER severity rules across 13 languages:
@@ -1159,7 +1167,6 @@ All runtime-applicable TypeScript ast-grep rules now have JavaScript equivalents
 - **Rust performance core (`pi-lens-core`)** — Optional Rust binary for CPU-intensive operations.
   All features fall back to TypeScript automatically if the binary is not available (it is **not**
   built automatically on `npm install` — run `npm run rust:build` once if you have Rust installed).
-
   - **File scanning** — ripgrep’s `ignore` crate for `.gitignore`-aware project scanning
   - **Similarity detection** — parallel 57×72 state-matrix index, persisted to
     `.pi-lens/rust-index.json` between invocations (fixes in-memory cache that reset on every
@@ -1213,7 +1220,6 @@ All runtime-applicable TypeScript ast-grep rules now have JavaScript equivalents
   - Removed `clients/interviewer-templates.ts` (240 lines)
   - Removed initialization from `index.ts`
 - **Deleted deprecated commands** — All were superseded by `/lens-booboo`:
-
   - `/lens-booboo-fix` command (fix-from-booboo.ts, 430 lines) — showed warning to use `/lens-booboo`
   - `/lens-fix-simplified` command (fix-simplified.ts, 770 lines) — never registered, unused
   - `/lens-rate` command (rate.ts, 340 lines) — showed warning to use `/lens-booboo`
@@ -1232,7 +1238,6 @@ All runtime-applicable TypeScript ast-grep rules now have JavaScript equivalents
   - Broken runner tests (7 files) — thin CLI wrappers with wrong imports
   - Trivial utility tests (5 files) — file extension parsing, string sanitization
 - **Added meaningful integration tests**:
-
   - `tests/clients/dispatch/dispatcher-flow.test.ts` — Runner registration, execution, delta mode, conditional runners
   - `tests/extension-hooks.test.ts` — pi API: tool/command/flag registration, event handlers
   - `tests/mocks/runner-factory.ts` — Mock runners for testing without real CLI tools
@@ -1568,7 +1573,6 @@ Migrated 20 critical security rules to NAPI (fast native execution):
 Three new lint runners with full test coverage:
 
 - **Spellcheck runner** (`clients/dispatch/runners/spellcheck.ts`): Markdown spellchecking
-
   - Uses `typos-cli` (Rust-based, fast, low false positives)
   - Checks `.md` and `.mdx` files
   - Priority 30, runs after code quality checks
@@ -1576,7 +1580,6 @@ Three new lint runners with full test coverage:
   - Install: `cargo install typos-cli`
 
 - **Oxlint runner** (`clients/dispatch/runners/oxlint.ts`): Fast JS/TS linting
-
   - Uses `oxlint` from Oxc project (Rust-based, ~100x faster than ESLint)
   - Zero-config by default
   - JSON output with fix suggestions

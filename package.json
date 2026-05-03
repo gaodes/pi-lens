@@ -1,5 +1,5 @@
 {
-	"name": "pi-lens",
+	"name": "@gaodes/pi-lens",
 	"version": "3.8.39",
 	"type": "module",
 	"description": "Real-time code feedback for pi \u2014 LSP, linters, formatters, type-checking, structural analysis & booboo",
@@ -56,7 +56,10 @@
 		"README.md",
 		"CHANGELOG.md",
 		"banner.svg",
-		"banner.png"
+		"banner.png",
+		"AGENTS.md",
+		"CLAUDE.md",
+		"LICENSE"
 	],
 	"peerDependencies": {
 		"@mariozechner/pi-coding-agent": "*"

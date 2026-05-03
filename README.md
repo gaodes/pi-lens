@@ -282,3 +282,46 @@ Dispatch is diagnostics-oriented: automatic formatting and safe autofix happen i
 | Nix                   | ✓   | lsp                                                                                                            | nixfmt              |
 | TOML                  | ✓   | lsp, taplo                                                                                                     | taplo               |
 | CMake                 | ✓   | lsp                                                                                                            | —                   |
+
+## Statusbar Widget (PrimeCodex fork)
+
+pi-lens integrates with [pi-statusbar](https://github.com/apmantza/pi-statusbar) to show live code quality in the footer:
+
+- **`OK`** (green) — clean, no issues
+- **`LSP:2 · 3 issues · 5 fixed`** — combined view with worst-state coloring (green → yellow → red)
+- Updates after every `turn_end` with LSP count, unresolved diagnostics, pipeline crashes, and auto-fix count
+
+Configure in `prime-settings.json`:
+
+```json
+{
+  "pi-lens": {
+    "statusbar": {
+      "icon": "f121",
+      "icon_color": "accent",
+      "text_font_color": "dim",
+      "show_icon": true,
+      "show_text": true,
+      "min_width": 12,
+      "placement": { "line": 3, "side": "left", "index": 1 },
+      "separator_before": { "icon": "eb8a", "icon_color": "dim" },
+      "separator_after": { "icon": "eb8a", "icon_color": "dim" }
+    }
+  }
+}
+```
+
+The existing `ctx.ui.setStatus()` fallback is preserved — if pi-statusbar is not loaded, the widget calls silently no-op.
+
+## Provenance
+
+| What                  | Where                                                                                |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| **Upstream**          | `npm:pi-lens` · [GitHub](https://github.com/apmantza/pi-lens) by Apostolos Mantziris |
+| **PrimeCodex source** | `~/agents/primecodex/extensions/pi-lens/`                                            |
+| **GitLab mirror**     | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-lens.git`      |
+| **npm (fork)**        | `@gaodes/pi-lens`                                                                    |
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
