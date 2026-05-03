@@ -366,6 +366,7 @@ export default function (pi: ExtensionAPI) {
 					text_font_color: "dim",
 					text_font_caps: "small",
 					text_font_style: "regular",
+					min_width: 12,
 				},
 			});
 			pi.events.emit("statusbar:widget:contribute", {
