@@ -7,11 +7,6 @@ import { isToolCallEventType } from "@earendil-works/pi-coding-agent";
 import { AstGrepClient } from "./clients/ast-grep-client.js";
 import { loadBootstrapClients } from "./clients/bootstrap.js";
 import { CacheManager } from "./clients/cache-manager.js";
-import {
-	clearWidgetState,
-	renderWidget,
-	setRenderCallback,
-} from "./clients/widget-state.js";
 import { getDiagnosticTracker } from "./clients/diagnostic-tracker.js";
 import {
 	getCascadeSessionStats,
@@ -32,6 +27,7 @@ import { getAllToolStatuses } from "./clients/installer/index.js";
 import { LANGUAGE_POLICY } from "./clients/language-policy.js";
 import { initLSPConfig } from "./clients/lsp/config.js";
 import { getLSPService, resetLSPService } from "./clients/lsp/index.js";
+import { isExternalOrVendorFile } from "./clients/path-utils.js";
 import {
 	EXPANSION_BUDGET_MS,
 	EXPANSION_LIMIT_LINES,
@@ -56,7 +52,6 @@ import {
 	handleToolResult,
 } from "./clients/runtime-tool-result.js";
 import { cancelLSPIdleReset, handleTurnEnd } from "./clients/runtime-turn.js";
-import { isExternalOrVendorFile } from "./clients/path-utils.js";
 import { safeSpawnAsync } from "./clients/safe-spawn.js";
 import {
 	createStarterSemgrepConfig,
@@ -66,7 +61,18 @@ import {
 	resolveSemgrepConfig,
 	savePiLensSemgrepConfig,
 } from "./clients/semgrep-config.js";
+import {
+	emitStatusbarUpdate as _emitStatusbarUpdate,
+	registerStatusbarWidget as _registerStatusbarWidget,
+	unregisterStatusbarWidget as _unregisterStatusbarWidget,
+	type StatusBarDeps,
+} from "./clients/statusbar-widget.js";
 import { TreeSitterClient } from "./clients/tree-sitter-client.js";
+import {
+	clearWidgetState,
+	renderWidget,
+	setRenderCallback,
+} from "./clients/widget-state.js";
 import { handleBooboo } from "./commands/booboo.js";
 import { initI18n, t } from "./i18n.js";
 import { createAstGrepReplaceTool } from "./tools/ast-grep-replace.js";
@@ -316,130 +322,20 @@ export default function (pi: ExtensionAPI) {
 		}
 	}
 
-	// --- Statusbar widget integration ---
+	// --- Statusbar widget integration (PrimeCodex) ---
+	const statusBarDeps: StatusBarDeps = {
+		getDiagnosticTracker,
+		getLSPService,
+		runtime,
+	};
 	function emitStatusbarUpdate() {
-		try {
-			const diagStats = getDiagnosticTracker().getStats();
-			const lspCount = getLSPService().getAliveClientCount();
-			const crashes = runtime.getCrashEntries();
-			const totalCrashes = crashes.reduce((sum, [, c]) => sum + c, 0);
-
-			const parts: string[] = [];
-			if (lspCount > 0) parts.push(`LSP:${lspCount}`);
-			if (diagStats.totalShown > 0) {
-				parts.push(`${diagStats.totalUnresolved} issues`);
-			}
-			if (totalCrashes > 0) parts.push(`${totalCrashes} crashes`);
-			if (diagStats.totalAutoFixed > 0)
-				parts.push(`${diagStats.totalAutoFixed} fixed`);
-
-			const text = parts.length > 0 ? parts.join(" · ") : "OK";
-			const color =
-				totalCrashes > 0
-					? "error"
-					: diagStats.totalUnresolved > 0
-						? "warning"
-						: "success";
-
-			pi.events.emit("statusbar:module:update", {
-				id: "pi-lens",
-				text,
-				visible: true,
-				style: { text_font_color: color },
-			});
-		} catch {
-			// Statusbar may not be loaded; skip silently.
-		}
+		_emitStatusbarUpdate(pi, statusBarDeps);
 	}
-
-	function loadLensSettings(): Record<string, unknown> {
-		try {
-			const agentDir = path.join(os.homedir(), ".pi", "agent");
-			const globalPath = path.join(agentDir, "prime-settings.json");
-			const projectPath = path.join(
-				process.cwd(),
-				".pi",
-				"prime-settings.json",
-			);
-			const settingsPath = nodeFs.existsSync(projectPath)
-				? projectPath
-				: globalPath;
-			if (!nodeFs.existsSync(settingsPath)) return {};
-			const raw = JSON.parse(nodeFs.readFileSync(settingsPath, "utf-8"));
-			return (raw["pi-lens"] as Record<string, unknown>) ?? {};
-		} catch {
-			return {};
-		}
-	}
-
-	function resolveStatusbarConfig() {
-		const settings = loadLensSettings();
-		const cfg = (settings.statusbar ?? {}) as Record<string, unknown>;
-		return {
-			icon: (cfg.icon as string) ?? "f121",
-			icon_color: (cfg.icon_color as string) ?? "accent",
-			text_font_color: (cfg.text_font_color as string) ?? "dim",
-			show_icon: (cfg.show_icon as boolean) ?? true,
-			show_text: (cfg.show_text as boolean) ?? true,
-			min_width: (cfg.min_width as number) ?? 12,
-			placement: {
-				line: ((cfg.placement as Record<string, unknown>)?.line as number) ?? 3,
-				side:
-					((cfg.placement as Record<string, unknown>)?.side as string) ??
-					"left",
-				index:
-					((cfg.placement as Record<string, unknown>)?.index as number) ?? 1,
-			},
-			separator_before: (cfg.separator_before as Record<string, unknown>) ?? {
-				icon: "eb8a",
-				icon_color: "dim",
-			},
-			separator_after: (cfg.separator_after as Record<string, unknown>) ?? {
-				icon: "eb8a",
-				icon_color: "dim",
-			},
-		};
-	}
-
 	function registerStatusbarWidget() {
-		try {
-			const cfg = resolveStatusbarConfig();
-			pi.events.emit("statusbar:module:register", {
-				id: "pi-lens",
-				text: "starting…",
-				visible: true,
-				placement: cfg.placement,
-				style: {
-					show_icon: cfg.show_icon,
-					icon: cfg.icon,
-					icon_color: cfg.icon_color,
-					text_font_color: cfg.text_font_color,
-					text_font_caps: "small",
-					text_font_style: "regular",
-					min_width: cfg.min_width,
-				},
-			});
-			pi.events.emit("statusbar:widget:contribute", {
-				id: "pi-lens",
-				label: "Pi Lens",
-				description:
-					"Code quality: LSP status, diagnostics, auto-fixes, crashes",
-				default_placement: cfg.placement,
-				separator_before: cfg.separator_before,
-				separator_after: cfg.separator_after,
-				priority: 0,
-			});
-		} catch {
-			// Statusbar may not be loaded; skip silently.
-		}
+		_registerStatusbarWidget(pi);
 	}
-
 	function unregisterStatusbarWidget() {
-		try {
-			pi.events.emit("statusbar:module:unregister", { id: "pi-lens" });
-		} catch {
-			// Statusbar may not be loaded; skip silently.
-		}
+		_unregisterStatusbarWidget(pi);
 	}
 
 	// --- Flags ---
