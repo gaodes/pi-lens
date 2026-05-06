@@ -4,7 +4,7 @@
   "description": "Real-time code feedback for pi — LSP, linters, formatters, type-checking, structural analysis, statusbar widget",
   "source": "https://github.com/apmantza/pi-lens.git",
   "upstream": "npm:pi-lens",
-  "mirror": "ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-lens.git",
+  "mirror": "ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/packages/pi-lens.git",
   "forkOf": "npm:pi-lens@3.8.39",
   "enabled": true
 }
