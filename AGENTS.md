@@ -39,5 +39,5 @@ Configured in `prime-settings.json`:
 | ----------------- | ------------------------------------------------------------------------------------ |
 | **Upstream**      | `npm:pi-lens` · [GitHub](https://github.com/apmantza/pi-lens) by Apostolos Mantziris |
 | **GitHub mirror** | [gaodes/pi-lens](https://github.com/gaodes/pi-lens)                                  |
-| **GitLab source** | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-lens.git`      |
+| **GitLab source** | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/packages/pi-lens.git`      |
 | **npm (fork)**    | [`@gaodes/pi-lens`](https://www.npmjs.com/package/@gaodes/pi-lens)                   |

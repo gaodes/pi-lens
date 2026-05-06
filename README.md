@@ -319,8 +319,8 @@ The existing `ctx.ui.setStatus()` fallback is preserved — if pi-statusbar is n
 | What                  | Where                                                                                |
 | --------------------- | ------------------------------------------------------------------------------------ |
 | **Upstream**          | `npm:pi-lens` · [GitHub](https://github.com/apmantza/pi-lens) by Apostolos Mantziris |
-| **PrimeCodex source** | `~/agents/primecodex/extensions/pi-lens/`                                            |
-| **GitLab mirror**     | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/extensions/pi-lens.git`      |
+| **PrimeCodex source** | `~/agents/primecodex/packages/pi-lens/`                                            |
+| **GitLab mirror**     | `ssh://git@gitlab-ssh.elches.dev:2222/agents/primecodex/packages/pi-lens.git`      |
 | **npm (fork)**        | `@gaodes/pi-lens`                                                                    |
 
 ## License
