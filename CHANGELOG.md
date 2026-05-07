@@ -6,6 +6,12 @@ All notable changes to pi-lens will be documented in this file.
 
 _No unreleased changes._
 
+## [3.8.43] - 2026-05-08
+
+### Changed
+
+- Updated peer dependency from `@mariozechner/pi-coding-agent` to `@earendil-works/pi-coding-agent` following the Pi 0.74.0 scope migration.
+
 ## [3.8.41] - 2026-05-03
 
 ### Changed
