@@ -12,7 +12,7 @@ import * as nodeFs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 // Re-import only the thin getters we need — keeps this module decoupled from
 // the full pipeline internals.  Callers pass the references at init time so

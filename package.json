@@ -1,6 +1,6 @@
 {
   "name": "@gaodes/pi-lens",
-  "version": "3.8.42",
+  "version": "3.8.43",
   "type": "module",
   "description": "Real-time code feedback for pi — LSP, linters, formatters, type-checking, structural analysis & booboo",
   "repository": {
@@ -62,7 +62,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@mariozechner/pi-coding-agent": "*"
+    "@earendil-works/pi-coding-agent": "*"
   },
   "dependencies": {
     "@ast-grep/napi": "^0.42.1",
