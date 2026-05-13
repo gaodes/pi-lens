@@ -88,3 +88,6 @@ clients/lsp/.intelephense/
 .claude/settings.local.json
 autoresearch.jsonl
 coverage/
+.primecodex.local.json
+
+graphify-out/
