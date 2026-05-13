@@ -68,11 +68,7 @@ import {
 	type StatusBarDeps,
 } from "./clients/statusbar-widget.js";
 import { TreeSitterClient } from "./clients/tree-sitter-client.js";
-import {
-	clearWidgetState,
-	renderWidget,
-	setRenderCallback,
-} from "./clients/widget-state.js";
+import { renderWidget, setRenderCallback } from "./clients/widget-state.js";
 import { handleBooboo } from "./commands/booboo.js";
 import { initI18n, t } from "./i18n.js";
 import { createAstGrepReplaceTool } from "./tools/ast-grep-replace.js";
